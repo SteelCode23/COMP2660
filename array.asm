@@ -17,32 +17,31 @@ negative_count DWORD 0
 main PROC
 
 mov ecx, count
-XOR EDX, EDX
-XOR EAX, EAX
-XOR ESI, ESI
+lea esi, array
+XOR EDX, EDX ;Clear registers
+XOR EAX, EAX ;Clear registers
 
 L1:
-MOV EBX, 0
-CMP EBX, array[EDX]
+mov ebx, [esi]
+CMP ebx, 0
 
-JG count_negative
-
+JL count_negative
 
 add_positive: ;1) Sum only the positive values
-ADD EAX, array[EDX]
+ADD EAX, ebx
 jmp next
 
 count_negative: ;2) Count the number of negative values
-INC esi ;counter
+inc edx  ;counter
 next:
 
-ADD EDX, 4
+ADD esi, 4
 
 loop L1
-;Store Results
 
+;Store Results
 MOV [positive_sum], eax
-mov [negative_count], esi
+mov [negative_count], edx
 call print_results
 main ENDP
 
